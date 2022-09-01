@@ -9,7 +9,7 @@ let handleUserLogin = (email, password) => {
             if (isExit) {
                 let user = await db.User.findOne({
                     where: {email: email},
-                    attributes:  ['email', 'roleId', 'password'],
+                    attributes: ['email', 'roleId', 'password'],
                     raw: true
                 })
                 if (user) {
@@ -17,7 +17,7 @@ let handleUserLogin = (email, password) => {
                     if (result) {
                         userData.errCode = 0
                         userData.errMessage = `OK`
-                        delete  user.password
+                        delete user.password
                         userData.user = user
                     } else {
                         userData.errCode = 3
@@ -51,6 +51,32 @@ let checkUserEmail = (userEmail) => {
         }
     })
 }
+
+const getAllUsers = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = ''
+            if (id && id === "ALL") {
+                users = await db.User.findAll({
+                    attributes: {
+                        exclude: ['password']
+                    }
+                })
+            } else if (id && id !== "ALL") {
+                users = await db.User.findOne({
+                    where: {id: id},
+                    attributes: {
+                        exclude: ['password']
+                    }
+                })
+            }
+            resolve(users)
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 module.exports = {
-    handleUserLogin: handleUserLogin
+    handleUserLogin: handleUserLogin,
+    getAllUsers: getAllUsers
 }

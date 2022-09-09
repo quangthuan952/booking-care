@@ -159,7 +159,6 @@ const editUser = data => {
                 user.firstName = data.firstName
                 user.lastName = data.lastName
                 user.address = data.address
-
                 await user.save()
                 resolve({
                     errCode: 0,
@@ -176,10 +175,35 @@ const editUser = data => {
         }
     })
 }
+
+const getAllCodeService = (type) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+         if(type) {
+             const res = {}
+             const allCode = await db.Allcode.findAll({
+                 where: {type: type}
+             })
+             res.errCode = 0
+             res.data = allCode
+             resolve(res)
+         }
+         else {
+             resolve({
+                 errCode: 1,
+                 errMessage: "Missing required parameter"
+             })
+         }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 module.exports = {
     handleUserLogin: handleUserLogin,
     getAllUsers: getAllUsers,
     createUser: createUser,
     deleteUser: deleteUser,
-    editUser: editUser
+    editUser: editUser,
+    getAllCodeService: getAllCodeService
 }

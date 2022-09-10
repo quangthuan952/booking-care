@@ -11,7 +11,7 @@ let handleUserLogin = (email, password) => {
             if (isExit) {
                 let user = await db.User.findOne({
                     where: {email: email},
-                    attributes: ['email', 'roleId', 'password'],
+                    attributes: ['email', 'roleId', 'password', 'firstName'],
                     raw: true
                 })
                 if (user) {
@@ -95,10 +95,10 @@ const createUser = (data) => {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 address: data.address,
-                phonenumber: data.phonenumber,
-                gender: data.gender === 1,
-                roleId: data.roleId,
-                positionId: data.positionId,
+                phonenumber: data.phoneNumber,
+                gender: data.gender,
+                roleId: data.role,
+                positionId: data.position,
                 image: data.image,
             })
             resolve({
